@@ -17,15 +17,23 @@ class LoginViewViewModel: ObservableObject {
     @Published var shouldShowImagePicker = false
     @Published var loginStatusMessage = ""
     @Published var image: UIImage?
+    @Published var uploadProgress: Double = 0.0
+
     
     init() {}
     
      func handlerAction() {
         if isLogInMode {
-            loginUser()
+            DispatchQueue.main.async {
+                self.loginUser()
+            }
+            //loginUser()
            print("Login")
         } else {
-            createNewAccount()
+            DispatchQueue.main.async {
+                self.createNewAccount()
+            }
+//            createNewAccount()
             print("Create account")
         }
     }
@@ -61,16 +69,17 @@ class LoginViewViewModel: ObservableObject {
     }
     
     private func persistImageToStorage() {
-        // let fileName = UUID().uuidString
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
         let ref = FirebaseManager.shared.storage.reference(withPath: uid)
         guard let imageData = self.image?.jpegData(compressionQuality: 0.5) else { return }
+        
         ref.putData(imageData) { metadata, error in
             if let error = error {
                 self.loginStatusMessage = "Failed to push image to storage: \(error)"
                 return
             }
+            
             ref.downloadURL { url, error in
                 if let error = error {
                     self.loginStatusMessage = "Failed to retrieve download URL: \(error)"
