@@ -6,34 +6,17 @@
 //
 
 import SwiftUI
-import Firebase
 
-class FirebaseManager: NSObject {
-    
-    let auth: Auth
-    static let shared = FirebaseManager()
-    
-    override init() {
-        FirebaseApp.configure()
-        
-        self.auth = Auth.auth()
-        
-        super.init()
-    }
-}
 
 struct LoginView: View {
     
-    @State var isLogInMode = false
-    @State var email = ""
-    @State var password = ""
-
+    @ObservedObject var viewModel = LoginViewViewModel()
     
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 16) {
-                    Picker(selection: $isLogInMode) {
+                    Picker(selection: $viewModel.isLogInMode) {
                         Text("Log in")
                             .tag(true)
                         Text("Create account")
@@ -43,9 +26,9 @@ struct LoginView: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     
-                    if !isLogInMode {
+                    if !viewModel.isLogInMode {
                         Button {
-                            //
+                            viewModel.shouldShowImagePicker.toggle()
                         } label: {
                             Image(systemName: "person.fill")
                                 .font(.system(size: 64))
@@ -54,11 +37,11 @@ struct LoginView: View {
                     }
                     
                     Group {
-                        TextField("Email", text: $email)
+                        TextField("Email", text: $viewModel.email)
                             .keyboardType(.emailAddress)
                             .textInputAutocapitalization(.never)
                         
-                        SecureField("Password", text: $password)
+                        SecureField("Password", text: $viewModel.password)
                     }
                     .padding(12)
                     .background(Color.white)
@@ -66,11 +49,11 @@ struct LoginView: View {
                         
                     Button {
                         // Action
-                       handlerAction()
+                        viewModel.handlerAction()
                     } label: {
                         HStack {
                             Spacer()
-                            Text(isLogInMode ? "Log In" : "Create account")
+                            Text(viewModel.isLogInMode ? "Log In" : "Create account")
                                 .foregroundColor(.white)
                                 .padding(.vertical, 10)
                                 .font(.system(size: 16, weight: .semibold))
@@ -81,52 +64,19 @@ struct LoginView: View {
                     }
                 }
                 .padding()
-                Text(self.loginStatusMessage)
+                Text(viewModel.loginStatusMessage)
                     .foregroundColor(.red)
             }
-            .navigationTitle(isLogInMode ? "Log In" : "Create account")
+            .navigationTitle(viewModel.isLogInMode ? "Log In" : "Create account")
             .background(Color(.init(white: 0, alpha: 0.05))
                 .ignoresSafeArea())
         }
         .navigationViewStyle(StackNavigationViewStyle())
-    }
-    private func handlerAction() {
-        if isLogInMode {
-            loginUser()
-//            print("Login")
-        } else {
-            createNewAccount()
-//            print("Create account")
+        .fullScreenCover(isPresented: $viewModel.shouldShowImagePicker) {
+            ImagePicker(image: $viewModel.image)
         }
     }
     
-    @State var loginStatusMessage = ""
-    
-    private func createNewAccount() {
-        FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {result, error in
-            if let error = error {
-                print("Failed to create user", error)
-                self.loginStatusMessage = "Failed to create user \(error)"
-                return
-            }
-            
-            print("Successfully created user: \(result?.user.uid ?? "")")
-            self.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
-        }
-    }
-    
-    private func loginUser() {
-        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, error in
-            if let error = error {
-                print("Failed to login user", error)
-                self.loginStatusMessage = "Failed to login user \(error)"
-                return
-            }
-            
-            print("Successfully loged in as user: \(result?.user.uid ?? "")")
-            self.loginStatusMessage = "Successfully loged in as user: \(result?.user.uid ?? "")"
-        }
-    }
 }
 
 struct ContentView_Previews: PreviewProvider {
