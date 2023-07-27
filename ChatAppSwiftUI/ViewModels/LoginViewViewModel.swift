@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Firebase
 
 class LoginViewViewModel: ObservableObject {
     
@@ -29,7 +30,7 @@ class LoginViewViewModel: ObservableObject {
         }
     }
     
-     func createNewAccount() {
+     private func createNewAccount() {
         FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {result, error in
             if let error = error {
                 print("Failed to create user", error)
@@ -39,6 +40,10 @@ class LoginViewViewModel: ObservableObject {
             
             print("Successfully created user: \(result?.user.uid ?? "")")
             self.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
+            
+            // Download image to Firebase
+            
+            self.persistImageToStorage()
         }
     }
     
@@ -52,6 +57,29 @@ class LoginViewViewModel: ObservableObject {
             
             print("Successfully loged in as user: \(result?.user.uid ?? "")")
             self.loginStatusMessage = "Successfully loged in as user: \(result?.user.uid ?? "")"
+        }
+    }
+    
+    private func persistImageToStorage() {
+        // let fileName = UUID().uuidString
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
+        let ref = FirebaseManager.shared.storage.reference(withPath: uid)
+        guard let imageData = self.image?.jpegData(compressionQuality: 0.5) else { return }
+        ref.putData(imageData) { metadata, error in
+            if let error = error {
+                self.loginStatusMessage = "Failed to push image to storage: \(error)"
+                return
+            }
+            ref.downloadURL { url, error in
+                if let error = error {
+                    self.loginStatusMessage = "Failed to retrieve download URL: \(error)"
+                    return
+                }
+                
+                self.loginStatusMessage = "Successfully stored image with url: \(url?.absoluteString ?? "")"
+                print("\(url?.absoluteString ?? "")")
+            }
         }
     }
 
