@@ -6,12 +6,28 @@
 //
 
 import SwiftUI
+import Firebase
+
+class FirebaseManager: NSObject {
+    
+    let auth: Auth
+    static let shared = FirebaseManager()
+    
+    override init() {
+        FirebaseApp.configure()
+        
+        self.auth = Auth.auth()
+        
+        super.init()
+    }
+}
 
 struct LoginView: View {
     
     @State var isLogInMode = false
     @State var email = ""
     @State var password = ""
+
     
     var body: some View {
         NavigationView {
@@ -65,17 +81,50 @@ struct LoginView: View {
                     }
                 }
                 .padding()
+                Text(self.loginStatusMessage)
+                    .foregroundColor(.red)
             }
             .navigationTitle(isLogInMode ? "Log In" : "Create account")
             .background(Color(.init(white: 0, alpha: 0.05))
                 .ignoresSafeArea())
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     private func handlerAction() {
         if isLogInMode {
-            print("Login")
+            loginUser()
+//            print("Login")
         } else {
-            print("Create account")
+            createNewAccount()
+//            print("Create account")
+        }
+    }
+    
+    @State var loginStatusMessage = ""
+    
+    private func createNewAccount() {
+        FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {result, error in
+            if let error = error {
+                print("Failed to create user", error)
+                self.loginStatusMessage = "Failed to create user \(error)"
+                return
+            }
+            
+            print("Successfully created user: \(result?.user.uid ?? "")")
+            self.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
+        }
+    }
+    
+    private func loginUser() {
+        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, error in
+            if let error = error {
+                print("Failed to login user", error)
+                self.loginStatusMessage = "Failed to login user \(error)"
+                return
+            }
+            
+            print("Successfully loged in as user: \(result?.user.uid ?? "")")
+            self.loginStatusMessage = "Successfully loged in as user: \(result?.user.uid ?? "")"
         }
     }
 }
