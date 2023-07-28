@@ -88,8 +88,38 @@ class LoginViewViewModel: ObservableObject {
                 
                 self.loginStatusMessage = "Successfully stored image with url: \(url?.absoluteString ?? "")"
                 print("\(url?.absoluteString ?? "")")
+                
+                guard let url = url else { return }
+                self.storeUserInformation(imageProfileURL: url)
             }
         }
     }
+    
+    private func storeUserInformation(imageProfileURL: URL) {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        let userData = ["email": self.email, "uid": uid, "profileImageURL": imageProfileURL.absoluteString]
+        
+        FirebaseManager.shared.firestore.collection("users")
+            .document(uid).setData(userData) { error in
+                if let error = error {
+                    print(error)
+                    self.loginStatusMessage = "\(error)"
+                    return
+                }
+                
+                print("Success Firestore")
+            }
+    }
 
 }
+
+
+//rules_version = '2';
+//
+//service cloud.firestore {
+//  match /databases/{database}/documents {
+//    match /{document=**} {
+//      allow read, write: if false;
+//    }
+//  }
+//}
