@@ -22,6 +22,7 @@
 		3A79398C2A779F3C00399AC6 /* MainMessagesViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A79398B2A779F3C00399AC6 /* MainMessagesViewViewModel.swift */; };
 		3A79398E2A77C8E800399AC6 /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A79398D2A77C8E800399AC6 /* CustomNavBar.swift */; };
 		3A7939902A77C9E800399AC6 /* NewMessageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A79398F2A77C9E800399AC6 /* NewMessageButton.swift */; };
+		3A7939922A77D6BF00399AC6 /* ChatUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7939912A77D6BF00399AC6 /* ChatUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		3A79398B2A779F3C00399AC6 /* MainMessagesViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesViewViewModel.swift; sourceTree = "<group>"; };
 		3A79398D2A77C8E800399AC6 /* CustomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
 		3A79398F2A77C9E800399AC6 /* NewMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageButton.swift; sourceTree = "<group>"; };
+		3A7939912A77D6BF00399AC6 /* ChatUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				3A00C0162A72803B00469FB8 /* FirebaseManager.swift */,
+				3A7939912A77D6BF00399AC6 /* ChatUser.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 				3A00C00F2A727B5B00469FB8 /* ImagePicker.swift in Sources */,
 				3A79398E2A77C8E800399AC6 /* CustomNavBar.swift in Sources */,
 				3A79398A2A779F2900399AC6 /* MainMessagesView.swift in Sources */,
+				3A7939922A77D6BF00399AC6 /* ChatUser.swift in Sources */,
 				3A0EDE362A7247AD000A5320 /* LoginView.swift in Sources */,
 				3A00C0172A72803B00469FB8 /* FirebaseManager.swift in Sources */,
 				3A0EDE342A7247AD000A5320 /* ChatAppSwiftUIApp.swift in Sources */,

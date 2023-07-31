@@ -14,6 +14,7 @@ struct MainMessagesView: View {
     var body: some View {
         NavigationView {
             VStack {
+               // Text("User: \(viewModel.chatUser?.email ?? "")")
                 // Custom nav bar
                 CustomNavBar()
                 
@@ -55,7 +56,9 @@ struct MainMessagesView: View {
                     }
                     Divider()
                         .padding(.vertical, 8)
-                } .padding(.horizontal)
+                }
+                .padding(.horizontal)
+                .padding(.top, 2)
             } .padding(.bottom, 50)
         }
     }

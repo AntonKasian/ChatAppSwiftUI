@@ -46,7 +46,7 @@ struct LoginView: View {
                                 }
                             }
                             .overlay(RoundedRectangle(cornerRadius: 64)
-                                .stroke(Color.black, lineWidth: 3)
+                                .stroke(Color(.label), lineWidth: 3)
                             )
                         }
                     }
@@ -59,7 +59,7 @@ struct LoginView: View {
                         SecureField("Password", text: $viewModel.password)
                     }
                     .padding(12)
-                    .background(Color.white)
+                    .background(Color(.init(gray: 0.4, alpha: 0.2)))
                     .cornerRadius(10)
                         
                     Button {

@@ -18,7 +18,7 @@ struct CustomNavBar: View {
                 .font(.system(size: 34, weight: .heavy))
             
             VStack(alignment: .leading, spacing: 4) {
-                Text("USERNAME")
+                Text(mainViewModel.chatUser?.email ?? "")
                     .font(.system(size: 24, weight: .bold))
                 
                 HStack {
