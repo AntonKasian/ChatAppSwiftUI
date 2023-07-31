@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct CustomNavBar: View {
     
@@ -14,11 +15,18 @@ struct CustomNavBar: View {
     var body: some View {
         HStack(spacing: 16) {
             
-            Image(systemName: "person.fill")
-                .font(.system(size: 34, weight: .heavy))
+            WebImage(url: URL(string: mainViewModel.chatUser?.profileImageURL ?? ""))
+                .resizable()
+                .scaledToFill()
+                .frame(width: 50, height: 50)
+                .clipShape(Circle())
+                .overlay(RoundedRectangle(cornerRadius: 50) .stroke(Color(.label), lineWidth: 1))
+                .shadow(radius: 5)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(mainViewModel.chatUser?.email ?? "")
+                Text(mainViewModel.chatUser?.email
+                    .replacingOccurrences(of: "@gmail.com", with: "")
+                    .replacingOccurrences(of: "@mail.com", with: "") ?? "")
                     .font(.system(size: 24, weight: .bold))
                 
                 HStack {

@@ -29,14 +29,16 @@ class MainMessagesViewViewModel: ObservableObject {
                 return
             }
             guard let data = snapshot?.data() else { return }
-//            print(data)
-           // self.errorMessage = "\(data)"
+            //            print(data)
+            // self.errorMessage = "\(data)"
             let uid = data["uid"] as? String ?? ""
             let email = data["email"] as? String ?? ""
             let profileImageURL = data["profileImageURL"] as? String ?? ""
-            self.chatUser = ChatUser(uid: uid, email: email, profileImageURL: profileImageURL)
+            self.chatUser = ChatUser(uid: uid,
+                                     email: email,
+                                     profileImageURL: profileImageURL)
             
-//            self.errorMessage = chatUser.profileImageURL
+            //            self.errorMessage = chatUser.profileImageURL
         }
     }
 }
