@@ -20,6 +20,8 @@
 		3A0EDE3B2A7247AF000A5320 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A0EDE3A2A7247AF000A5320 /* Preview Assets.xcassets */; };
 		3A79398A2A779F2900399AC6 /* MainMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7939892A779F2900399AC6 /* MainMessagesView.swift */; };
 		3A79398C2A779F3C00399AC6 /* MainMessagesViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A79398B2A779F3C00399AC6 /* MainMessagesViewViewModel.swift */; };
+		3A79398E2A77C8E800399AC6 /* CustomNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A79398D2A77C8E800399AC6 /* CustomNavBar.swift */; };
+		3A7939902A77C9E800399AC6 /* NewMessageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A79398F2A77C9E800399AC6 /* NewMessageButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		3A0EDE3A2A7247AF000A5320 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3A7939892A779F2900399AC6 /* MainMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesView.swift; sourceTree = "<group>"; };
 		3A79398B2A779F3C00399AC6 /* MainMessagesViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesViewViewModel.swift; sourceTree = "<group>"; };
+		3A79398D2A77C8E800399AC6 /* CustomNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavBar.swift; sourceTree = "<group>"; };
+		3A79398F2A77C9E800399AC6 /* NewMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +59,8 @@
 			children = (
 				3A0EDE352A7247AD000A5320 /* LoginView.swift */,
 				3A7939892A779F2900399AC6 /* MainMessagesView.swift */,
+				3A79398D2A77C8E800399AC6 /* CustomNavBar.swift */,
+				3A79398F2A77C9E800399AC6 /* NewMessageButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -204,11 +210,13 @@
 			files = (
 				3A79398C2A779F3C00399AC6 /* MainMessagesViewViewModel.swift in Sources */,
 				3A00C00F2A727B5B00469FB8 /* ImagePicker.swift in Sources */,
+				3A79398E2A77C8E800399AC6 /* CustomNavBar.swift in Sources */,
 				3A79398A2A779F2900399AC6 /* MainMessagesView.swift in Sources */,
 				3A0EDE362A7247AD000A5320 /* LoginView.swift in Sources */,
 				3A00C0172A72803B00469FB8 /* FirebaseManager.swift in Sources */,
 				3A0EDE342A7247AD000A5320 /* ChatAppSwiftUIApp.swift in Sources */,
 				3A00C0142A727EFF00469FB8 /* LoginViewViewModel.swift in Sources */,
+				3A7939902A77C9E800399AC6 /* NewMessageButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

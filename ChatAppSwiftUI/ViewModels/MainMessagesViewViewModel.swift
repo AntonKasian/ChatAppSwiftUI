@@ -11,3 +11,5 @@ class MainMessagesViewViewModel: ObservableObject {
     
     @Published var shouldShowLogOutOptions = false
 }
+
+
