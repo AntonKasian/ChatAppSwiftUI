@@ -21,6 +21,7 @@ class LoginViewViewModel: ObservableObject {
 
     
     init() {}
+
     
      func handlerAction() {
         if isLogInMode {

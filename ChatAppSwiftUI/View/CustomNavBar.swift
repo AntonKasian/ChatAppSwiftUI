@@ -15,7 +15,7 @@ struct CustomNavBar: View {
     var body: some View {
         HStack(spacing: 16) {
             
-            WebImage(url: URL(string: mainViewModel.chatUser?.profileImageURL ?? ""))
+            WebImage(url: URL(string: mainViewModel.chatUser?.profileImageURL ?? "Not found"))
                 .resizable()
                 .scaledToFill()
                 .frame(width: 50, height: 50)
@@ -24,9 +24,9 @@ struct CustomNavBar: View {
                 .shadow(radius: 5)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(mainViewModel.chatUser?.email
+                Text(mainViewModel.chatUser?.email ?? "Not found"
                     .replacingOccurrences(of: "@gmail.com", with: "")
-                    .replacingOccurrences(of: "@mail.com", with: "") ?? "")
+                    .replacingOccurrences(of: "@mail.com", with: ""))
                     .font(.system(size: 24, weight: .bold))
                 
                 HStack {
@@ -51,6 +51,7 @@ struct CustomNavBar: View {
         .confirmationDialog("settings", isPresented: $mainViewModel.shouldShowLogOutOptions) {
             Button(role: .destructive) {
                 print("Sign out button tapped")
+                mainViewModel.handleSignOut()
             } label: {
                 Text("Sign Out")
             }
@@ -58,7 +59,8 @@ struct CustomNavBar: View {
         } message: {
             Text("What do you want to do?")
         }
+        .fullScreenCover(isPresented: $mainViewModel.isUserCurrentlyLogedOut) {
+            LoginView()
+        }
     }
-    
-    
 }

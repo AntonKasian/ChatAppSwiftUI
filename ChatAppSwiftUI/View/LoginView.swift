@@ -61,7 +61,7 @@ struct LoginView: View {
                     .padding(12)
                     .background(Color(.init(gray: 0.4, alpha: 0.2)))
                     .cornerRadius(10)
-                        
+                    
                     Button {
                         // Action
                         viewModel.handlerAction()
