@@ -24,9 +24,9 @@ struct CustomNavBar: View {
                 .shadow(radius: 5)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(mainViewModel.chatUser?.email ?? "Not found"
+                Text(mainViewModel.chatUser?.email
                     .replacingOccurrences(of: "@gmail.com", with: "")
-                    .replacingOccurrences(of: "@mail.com", with: ""))
+                    .replacingOccurrences(of: "@mail.com", with: "") ?? "Not found")
                     .font(.system(size: 24, weight: .bold))
                 
                 HStack {
@@ -62,6 +62,7 @@ struct CustomNavBar: View {
         .fullScreenCover(isPresented: $mainViewModel.isUserCurrentlyLogedOut) {
             LoginView(didCompleteLoginProcess: {
                 self.mainViewModel.isUserCurrentlyLogedOut = false
+                self.mainViewModel.fetchCurrentUser()
             })
         }
     }

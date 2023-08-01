@@ -43,7 +43,7 @@ class LoginViewViewModel: ObservableObject {
 //            print("Create account")
 //        }
 //    }
-//    
+//
 //     private func createNewAccount() {
 //        FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {result, error in
 //            if let error = error {
@@ -51,18 +51,18 @@ class LoginViewViewModel: ObservableObject {
 //                self.loginStatusMessage = "Failed to create user \(error)"
 //                return
 //            }
-//            
+//
 //            print("Successfully created user: \(result?.user.uid ?? "")")
 //            self.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
-//            
+//
 //            // Download image to Firebase
-//            
+//
 //            self.persistImageToStorage()
-//            
+//
 //            self.didCompleteLoginProcess()
 //        }
 //    }
-//    
+//
 //    private func loginUser() {
 //        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, error in
 //            if let error = error {
@@ -70,11 +70,11 @@ class LoginViewViewModel: ObservableObject {
 //                self.loginStatusMessage = "Failed to login user \(error)"
 //                return
 //            }
-//            
+//
 //            print("Successfully loged in as user: \(result?.user.uid ?? "")")
 //            self.loginStatusMessage = "Successfully loged in as user: \(result?.user.uid ?? "")"
 //        }
-//        
+//
 //        self.didCompleteLoginProcess()
 //    }
     
@@ -123,13 +123,3 @@ class LoginViewViewModel: ObservableObject {
 
 }
 
-
-//rules_version = '2';
-//
-//service cloud.firestore {
-//  match /databases/{database}/documents {
-//    match /{document=**} {
-//      allow read, write: if false;
-//    }
-//  }
-//}
