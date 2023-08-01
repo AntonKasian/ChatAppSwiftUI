@@ -94,21 +94,27 @@ struct LoginView: View {
     
     func handlerAction() {
         if viewModel.isLogInMode {
-           DispatchQueue.main.async {
-               self.loginUser()
-           }
-           //loginUser()
+//           DispatchQueue.main.async {
+//               self.loginUser()
+//           }
+           loginUser()
           print("Login")
        } else {
-           DispatchQueue.main.async {
-               self.createNewAccount()
-           }
-//            createNewAccount()
+//           DispatchQueue.main.async {
+//               self.createNewAccount()
+//           }
+            createNewAccount()
            print("Create account")
        }
    }
    
     private func createNewAccount() {
+        
+        if self.viewModel.image == nil {
+            self.viewModel.loginStatusMessage = "You must select an avatar image"
+            return
+        }
+        
         FirebaseManager.shared.auth.createUser(withEmail: viewModel.email, password: viewModel.password) {result, error in
            if let error = error {
                print("Failed to create user", error)
@@ -121,7 +127,7 @@ struct LoginView: View {
            
            // Download image to Firebase
            
-            self.viewModel.persistImageToStorage()
+            self.persistImageToStorage()
            
            self.didCompleteLoginProcess()
        }
@@ -141,6 +147,50 @@ struct LoginView: View {
            self.didCompleteLoginProcess()
        }
        
+   }
+    
+    func storeUserInformation(imageProfileURL: URL) {
+       guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        let userData = ["email": self.viewModel.email, "uid": uid, "profileImageURL": imageProfileURL.absoluteString]
+       
+       FirebaseManager.shared.firestore.collection("users")
+           .document(uid).setData(userData) { error in
+               if let error = error {
+                   print(error)
+                   self.viewModel.loginStatusMessage = "\(error)"
+                   return
+               }
+               
+               print("Success Firestore")
+               self.didCompleteLoginProcess()
+           }
+   }
+    
+    func persistImageToStorage() {
+       guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+       
+       let ref = FirebaseManager.shared.storage.reference(withPath: uid)
+        guard let imageData = self.viewModel.image?.jpegData(compressionQuality: 0.5) else { return }
+       
+       ref.putData(imageData) { metadata, error in
+           if let error = error {
+               self.viewModel.loginStatusMessage = "Failed to push image to storage: \(error)"
+               return
+           }
+           
+           ref.downloadURL { url, error in
+               if let error = error {
+                   self.viewModel.loginStatusMessage = "Failed to retrieve download URL: \(error)"
+                   return
+               }
+               
+               self.viewModel.loginStatusMessage = "Successfully stored image with url: \(url?.absoluteString ?? "")"
+               print("\(url?.absoluteString ?? "")")
+               
+               guard let url = url else { return }
+               self.storeUserInformation(imageProfileURL: url)
+           }
+       }
    }
     
 }
