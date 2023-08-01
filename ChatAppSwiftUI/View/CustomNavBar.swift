@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 struct CustomNavBar: View {
     
     @ObservedObject var mainViewModel = MainMessagesViewViewModel()
+    @State var isAnimating = true
     
     var body: some View {
         HStack(spacing: 16) {
@@ -24,10 +25,14 @@ struct CustomNavBar: View {
                 .shadow(radius: 5)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(mainViewModel.chatUser?.email
-                    .replacingOccurrences(of: "@gmail.com", with: "")
-                    .replacingOccurrences(of: "@mail.com", with: "") ?? "Not found")
+                if let email = mainViewModel.chatUser?.email {
+                    Text(email
+                        .replacingOccurrences(of: "@gmail.com", with: "")
+                        .replacingOccurrences(of: "@mail.com", with: ""))
                     .font(.system(size: 24, weight: .bold))
+                } else {
+                    ActivityIndicator($isAnimating) // Вместо "Not found" будет показываться индикатор загрузки
+                }
                 
                 HStack {
                     Circle()
