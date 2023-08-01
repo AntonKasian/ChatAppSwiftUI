@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct LoginView: View {
-    
+    let didCompleteLoginProcess: () -> ()
     @ObservedObject var viewModel = LoginViewViewModel()
     
     var body: some View {
@@ -64,7 +64,7 @@ struct LoginView: View {
                     
                     Button {
                         // Action
-                        viewModel.handlerAction()
+                        handlerAction()
                     } label: {
                         HStack {
                             Spacer()
@@ -92,10 +92,63 @@ struct LoginView: View {
         }
     }
     
+    func handlerAction() {
+        if viewModel.isLogInMode {
+           DispatchQueue.main.async {
+               self.loginUser()
+           }
+           //loginUser()
+          print("Login")
+       } else {
+           DispatchQueue.main.async {
+               self.createNewAccount()
+           }
+//            createNewAccount()
+           print("Create account")
+       }
+   }
+   
+    private func createNewAccount() {
+        FirebaseManager.shared.auth.createUser(withEmail: viewModel.email, password: viewModel.password) {result, error in
+           if let error = error {
+               print("Failed to create user", error)
+               self.viewModel.loginStatusMessage = "Failed to create user \(error)"
+               return
+           }
+           
+           print("Successfully created user: \(result?.user.uid ?? "")")
+            self.viewModel.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
+           
+           // Download image to Firebase
+           
+            self.viewModel.persistImageToStorage()
+           
+           self.didCompleteLoginProcess()
+       }
+   }
+   
+   private func loginUser() {
+       FirebaseManager.shared.auth.signIn(withEmail: viewModel.email, password: viewModel.password) { result, error in
+           if let error = error {
+               print("Failed to login user", error)
+               self.viewModel.loginStatusMessage = "Failed to login user \(error)"
+               return
+           }
+           
+           print("Successfully loged in as user: \(result?.user.uid ?? "")")
+           self.viewModel.loginStatusMessage = "Successfully loged in as user: \(result?.user.uid ?? "")"
+           
+           self.didCompleteLoginProcess()
+       }
+       
+   }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(didCompleteLoginProcess: {
+            
+        })
     }
 }

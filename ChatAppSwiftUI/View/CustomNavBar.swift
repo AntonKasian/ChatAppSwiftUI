@@ -60,7 +60,9 @@ struct CustomNavBar: View {
             Text("What do you want to do?")
         }
         .fullScreenCover(isPresented: $mainViewModel.isUserCurrentlyLogedOut) {
-            LoginView()
+            LoginView(didCompleteLoginProcess: {
+                self.mainViewModel.isUserCurrentlyLogedOut = false
+            })
         }
     }
 }

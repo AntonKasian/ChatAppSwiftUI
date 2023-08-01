@@ -11,6 +11,8 @@ import Firebase
 
 class LoginViewViewModel: ObservableObject {
     
+    
+    
     @Published var isLogInMode = false
     @Published var email = ""
     @Published var password = ""
@@ -21,55 +23,62 @@ class LoginViewViewModel: ObservableObject {
 
     
     init() {}
+//    init(didCompleteLoginProcess: @escaping () -> ()) {
+//           self.didCompleteLoginProcess = didCompleteLoginProcess
+//       }
 
     
-     func handlerAction() {
-        if isLogInMode {
-            DispatchQueue.main.async {
-                self.loginUser()
-            }
-            //loginUser()
-           print("Login")
-        } else {
-            DispatchQueue.main.async {
-                self.createNewAccount()
-            }
-//            createNewAccount()
-            print("Create account")
-        }
-    }
+//     func handlerAction() {
+//        if isLogInMode {
+//            DispatchQueue.main.async {
+//                self.loginUser()
+//            }
+//            //loginUser()
+//           print("Login")
+//        } else {
+//            DispatchQueue.main.async {
+//                self.createNewAccount()
+//            }
+////            createNewAccount()
+//            print("Create account")
+//        }
+//    }
+//    
+//     private func createNewAccount() {
+//        FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {result, error in
+//            if let error = error {
+//                print("Failed to create user", error)
+//                self.loginStatusMessage = "Failed to create user \(error)"
+//                return
+//            }
+//            
+//            print("Successfully created user: \(result?.user.uid ?? "")")
+//            self.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
+//            
+//            // Download image to Firebase
+//            
+//            self.persistImageToStorage()
+//            
+//            self.didCompleteLoginProcess()
+//        }
+//    }
+//    
+//    private func loginUser() {
+//        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, error in
+//            if let error = error {
+//                print("Failed to login user", error)
+//                self.loginStatusMessage = "Failed to login user \(error)"
+//                return
+//            }
+//            
+//            print("Successfully loged in as user: \(result?.user.uid ?? "")")
+//            self.loginStatusMessage = "Successfully loged in as user: \(result?.user.uid ?? "")"
+//        }
+//        
+//        self.didCompleteLoginProcess()
+//    }
     
-     private func createNewAccount() {
-        FirebaseManager.shared.auth.createUser(withEmail: email, password: password) {result, error in
-            if let error = error {
-                print("Failed to create user", error)
-                self.loginStatusMessage = "Failed to create user \(error)"
-                return
-            }
-            
-            print("Successfully created user: \(result?.user.uid ?? "")")
-            self.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
-            
-            // Download image to Firebase
-            
-            self.persistImageToStorage()
-        }
-    }
-    
-    private func loginUser() {
-        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, error in
-            if let error = error {
-                print("Failed to login user", error)
-                self.loginStatusMessage = "Failed to login user \(error)"
-                return
-            }
-            
-            print("Successfully loged in as user: \(result?.user.uid ?? "")")
-            self.loginStatusMessage = "Successfully loged in as user: \(result?.user.uid ?? "")"
-        }
-    }
-    
-    private func persistImageToStorage() {
+     func persistImageToStorage() {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         
         let ref = FirebaseManager.shared.storage.reference(withPath: uid)
@@ -96,7 +105,7 @@ class LoginViewViewModel: ObservableObject {
         }
     }
     
-    private func storeUserInformation(imageProfileURL: URL) {
+     func storeUserInformation(imageProfileURL: URL) {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         let userData = ["email": self.email, "uid": uid, "profileImageURL": imageProfileURL.absoluteString]
         
