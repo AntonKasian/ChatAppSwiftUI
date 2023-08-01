@@ -7,7 +7,10 @@
 
 import SwiftUI
 
-struct ChatUser {
+struct ChatUser: Identifiable {
+    
+    var id: String { uid }
+    
     let uid, email, profileImageURL: String
     
     init(data: [String: Any]) {

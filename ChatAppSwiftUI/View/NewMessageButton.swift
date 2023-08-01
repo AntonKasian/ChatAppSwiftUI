@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct NewMessageButton: View {
+    
+    @ObservedObject var viewModel = MainMessagesViewViewModel()
+    
     var body: some View {
         Button {
-            //
+            viewModel.shouldShowNewMessageScreen.toggle()
             print("New message button tapped")
         } label: {
             HStack {
@@ -25,6 +28,9 @@ struct NewMessageButton: View {
             .cornerRadius(32)
             .padding(.horizontal)
             .shadow(radius: 15)
+        }
+        .fullScreenCover(isPresented: $viewModel.shouldShowNewMessageScreen) {
+            NewMessageView()
         }
     }
 }
