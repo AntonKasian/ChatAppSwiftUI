@@ -11,15 +11,17 @@ struct MainMessagesView: View {
     
     @ObservedObject var viewModel = MainMessagesViewViewModel()
     
+    
     var body: some View {
         NavigationView {
             VStack {
-               // Text("User: \(viewModel.chatUser?.email ?? "")")
-                // Custom nav bar
                 CustomNavBar()
-                
-                //ScrollView
                 messagesScrollView
+                
+//                NavigationLink("", isActive: $viewModel.shouldNavigateToChatLogView) {
+//                    Text("Chat Login view")
+//                } in NewMessageButton
+
             }
             .overlay(
                 NewMessageButton()
@@ -33,27 +35,37 @@ struct MainMessagesView: View {
         ScrollView {
             ForEach(0..<10, id: \.self) { num in
                 VStack {
-                    HStack(spacing: 16) {
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 32))
-                            .padding(8)
-                            .overlay(RoundedRectangle(cornerRadius: 44)
-                                .stroke(Color(.label), lineWidth: 1)
-                            )
-                        
-                        
-                        VStack(alignment: .leading)  {
-                            Text("Username")
-                                .font(.system(size: 16, weight: .bold))
-                            Text("Messages sent to user")
-                                .font(.system(size: 14))
-                                .foregroundColor(Color(.lightGray))
+                    NavigationLink {
+                        Text("Destination")
+                    } label: {
+                        HStack(spacing: 16) {
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 32))
+                                .padding(8)
+                                .foregroundColor(Color(.label))
+                                .overlay(RoundedRectangle(cornerRadius: 44)
+                                    .stroke(Color(.label), lineWidth: 1)
+                                )
+                            
+                            
+                            VStack(alignment: .leading)  {
+                                Text("Username")
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(Color(.label))
+                                Text("Messages sent to user")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(Color(.lightGray))
+                            }
+                            Spacer()
+                            
+                            Text("22d")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(Color(.label))
                         }
-                        Spacer()
-                        
-                        Text("22d")
-                            .font(.system(size: 14, weight: .semibold))
                     }
+                        
+                    
+                    
                     Divider()
                         .padding(.vertical, 8)
                 }

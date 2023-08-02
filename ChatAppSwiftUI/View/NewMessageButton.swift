@@ -10,8 +10,14 @@ import SwiftUI
 struct NewMessageButton: View {
     
     @ObservedObject var viewModel = MainMessagesViewViewModel()
+    @State var chatUser: ChatUser?
     
     var body: some View {
+        
+        NavigationLink("", isActive: $viewModel.shouldNavigateToChatLogView) {
+            ChatLogView(chatUser: self.chatUser)
+        }
+        
         Button {
             viewModel.shouldShowNewMessageScreen.toggle()
             print("New message button tapped")
@@ -30,7 +36,11 @@ struct NewMessageButton: View {
             .shadow(radius: 15)
         }
         .fullScreenCover(isPresented: $viewModel.shouldShowNewMessageScreen) {
-            NewMessageView()
+            NewMessageView(didSelectNewUser: { user in
+                print(user.email)
+                self.viewModel.shouldNavigateToChatLogView.toggle()
+                self.chatUser = user
+            })
         }
     }
 }
