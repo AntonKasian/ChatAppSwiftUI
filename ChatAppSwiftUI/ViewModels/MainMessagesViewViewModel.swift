@@ -15,6 +15,7 @@ class MainMessagesViewViewModel: ObservableObject {
     @Published var isUserCurrentlyLogedOut = false
     @Published var shouldShowNewMessageScreen = false
     @Published var shouldNavigateToChatLogView = false
+    @Published var recentMessages = [RecentMessage]()
     
     init() {
         DispatchQueue.main.async {
@@ -22,6 +23,40 @@ class MainMessagesViewViewModel: ObservableObject {
         }
         
         fetchCurrentUser()
+        
+        fetchResentMessages()
+    }
+    
+    private func fetchResentMessages() {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
+        FirebaseManager.shared.firestore
+            .collection("recent_messages")
+            .document(uid)
+            .collection("messages")
+            .order(by: "timestamp")
+            .addSnapshotListener { querySnapshot, error in
+                if let error = error {
+                    print("Error with fetchResentMessages: \(error)")
+                    return
+                }
+                
+                //Возомжно тут происходит переход на MainView после нажатитя отправить
+                querySnapshot?.documentChanges.forEach({ change in
+                   
+                    //                    if change.type == .added {
+                    let docId = change.document.documentID
+                    if let index = self.recentMessages.firstIndex(where: { rm in
+                        return rm.documentId == docId
+                    }) {
+                        self.recentMessages.remove(at: index)
+                    }
+                    
+                    self.recentMessages.insert(.init(documentId: docId, data: change.document.data()), at: 0)
+                    
+                    //                    }
+                })
+            }
     }
     
      func fetchCurrentUser() {

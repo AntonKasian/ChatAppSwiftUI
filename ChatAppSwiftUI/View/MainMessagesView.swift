@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct MainMessagesView: View {
     
@@ -17,10 +18,6 @@ struct MainMessagesView: View {
             VStack {
                 CustomNavBar()
                 messagesScrollView
-                
-//                NavigationLink("", isActive: $viewModel.shouldNavigateToChatLogView) {
-//                    Text("Chat Login view")
-//                } in NewMessageButton
 
             }
             .overlay(
@@ -33,28 +30,38 @@ struct MainMessagesView: View {
     
     private var messagesScrollView: some View {
         ScrollView {
-            ForEach(0..<10, id: \.self) { num in
+            ForEach(viewModel.recentMessages) { recentMessage in
                 VStack {
                     NavigationLink {
                         Text("Destination")
                     } label: {
                         HStack(spacing: 16) {
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 32))
-                                .padding(8)
-                                .foregroundColor(Color(.label))
+                            WebImage(url: URL(string: recentMessage.profileImageURL))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 64, height: 64)
+                                .clipped()
+                                .cornerRadius(64)
                                 .overlay(RoundedRectangle(cornerRadius: 44)
-                                    .stroke(Color(.label), lineWidth: 1)
-                                )
+                                    .stroke(Color(.label), lineWidth: 1))
+                                .shadow(radius: 5)
+//                            Image(systemName: "person.fill")
+//                                .font(.system(size: 32))
+//                                .padding(8)
+//                                .foregroundColor(Color(.label))
+//                                .overlay(RoundedRectangle(cornerRadius: 44)
+//                                    .stroke(Color(.label), lineWidth: 1)
+//                                )
                             
                             
                             VStack(alignment: .leading)  {
-                                Text("Username")
+                                Text(recentMessage.email)
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(Color(.label))
-                                Text("Messages sent to user")
+                                Text(recentMessage.text)
                                     .font(.system(size: 14))
-                                    .foregroundColor(Color(.lightGray))
+                                    .foregroundColor(Color(.darkGray))
+                                    .multilineTextAlignment(.leading)
                             }
                             Spacer()
                             

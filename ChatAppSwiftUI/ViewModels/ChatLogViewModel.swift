@@ -70,6 +70,9 @@ class ChatLogViewModel: ObservableObject {
                 return
             }
             print("Save in Firestore current user sending message")
+            
+            self.persistRecentMessage()
+            
             self.chatText = ""
             self.count += 1
         }
@@ -88,6 +91,37 @@ class ChatLogViewModel: ObservableObject {
                 return
             }
             print("Recipient saved message as well")
+        }
+    }
+    
+    private func persistRecentMessage() {
+        guard let chatUser = chatUser else { return }
+        
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        guard let toId = self.chatUser?.uid else { return }
+        
+        let document = FirebaseManager.shared.firestore
+            .collection("recent_messages")
+            .document(uid)
+            .collection("messages")
+            .document(toId)
+        
+        let data = [
+            FirebaseConstants.timestamp: Timestamp(),
+            FirebaseConstants.text: self.chatText,
+            FirebaseConstants.fromId: uid,
+            FirebaseConstants.toId: toId,
+            FirebaseConstants.profileImageURL: chatUser.profileImageURL,
+            FirebaseConstants.email: chatUser.email
+        ] as [String : Any]
+        
+        // save for recipient
+        
+        document.setData(data) { error in
+            if let error = error {
+                print("Error with persistRecentMessage: \(error)")
+                return 
+            }
         }
     }
 }
