@@ -32,16 +32,31 @@ struct ChatLogView: View {
     
     private var messagesView: some View {
         ScrollView {
-            ForEach(0..<10) {num in
-                HStack {
-                    Spacer()
-                    HStack {
-                        Text("Fake message")
-                            .foregroundColor(.white)
+            ForEach(viewModel.chatMessages) {message in
+                VStack {
+                    if message.fromId == FirebaseManager.shared.auth.currentUser?.uid {
+                        HStack {
+                            Spacer()
+                            HStack {
+                                Text(message.text)
+                                    .foregroundColor(.white)
+                            }
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(8)
+                        }
+                    } else {
+                        HStack {
+                            HStack() {
+                                Text(message.text)
+                                    .foregroundColor(.black)
+                            }
+                            .padding()
+                            .background(Color(.init(white: 0.9, alpha: 1)))
+                            .cornerRadius(8)
+                            Spacer()
+                        }
                     }
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
                 }
                 .padding(.horizontal)
                 .padding(.top, 8)
@@ -50,7 +65,8 @@ struct ChatLogView: View {
                 Spacer()
             }
         }
-        .background(Color(.init(white: 0.95, alpha: 1)))
+        //.background(Color(.init(white: 0.95, alpha: 1)))
+        .background(Color(.systemBackground))
         .edgesIgnoringSafeArea(.horizontal)
     }
     
