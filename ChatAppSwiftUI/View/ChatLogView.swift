@@ -10,6 +10,7 @@ import SwiftUI
 struct ChatLogView: View {
     
     let chatUser: ChatUser?
+    static let emptyScrolltoString = "Empty"
     
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser   // made for let chatUser
@@ -26,43 +27,31 @@ struct ChatLogView: View {
         }
         .padding(.horizontal, -13) // maybe bugs will be here with ScrollView
         .navigationTitle(chatUser?.email ?? "Not found")
-            .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.inline)
+
         .padding()
     }
     
     private var messagesView: some View {
         ScrollView {
-            ForEach(viewModel.chatMessages) {message in
+            ScrollViewReader { scrollViewProxy in
+                
                 VStack {
-                    if message.fromId == FirebaseManager.shared.auth.currentUser?.uid {
-                        HStack {
-                            Spacer()
-                            HStack {
-                                Text(message.text)
-                                    .foregroundColor(.white)
-                            }
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(8)
-                        }
-                    } else {
-                        HStack {
-                            HStack() {
-                                Text(message.text)
-                                    .foregroundColor(.black)
-                            }
-                            .padding()
-                            .background(Color(.init(white: 0.9, alpha: 1)))
-                            .cornerRadius(8)
-                            Spacer()
+                    ForEach(viewModel.chatMessages) {message in
+                        MessageView(message: message)
+                    }
+                    HStack{
+                        Spacer()
+                    }
+                    .id(Self.emptyScrolltoString)
+                }
+                .onReceive(viewModel.$count) { _ in
+                    if viewModel.count > 0 {
+                        withAnimation(.easeOut(duration: 0.5)) {
+                            scrollViewProxy.scrollTo(Self.emptyScrolltoString, anchor: .bottom)
                         }
                     }
                 }
-                .padding(.horizontal)
-                .padding(.top, 8)
-            }
-            HStack{
-                Spacer()
             }
         }
         //.background(Color(.init(white: 0.95, alpha: 1)))
@@ -74,7 +63,7 @@ struct ChatLogView: View {
         HStack(spacing: 16) {
             Image(systemName: "photo.on.rectangle")
                 .font(.system(size: 24))
-                .foregroundColor(Color(.darkGray))
+                .foregroundColor(Color(.label))
             ZStack {
                 ZStack {
                     if viewModel.chatText.isEmpty {
@@ -84,7 +73,10 @@ struct ChatLogView: View {
                             .padding(.leading, 3)
                     }
                     TextEditor(text: $viewModel.chatText)
+                        .background(Color(.init(white: 0.8, alpha: 1)))
+                        .cornerRadius(10)
                         .opacity(viewModel.chatText.isEmpty ? 0.2 : 1)
+                        
                 }
             }
                 .frame(height: 40)
@@ -109,9 +101,10 @@ struct ChatLogView: View {
 
 struct ChatLogView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            ChatLogView(chatUser: .init(data: ["uid" : "y9ow4sph29R5pzznCzfIObGuoTm2",
-                                               "email" : "fake@gmail.com"]))
-        }
+//        NavigationView {
+//            ChatLogView(chatUser: .init(data: ["uid" : "y9ow4sph29R5pzznCzfIObGuoTm2",
+//                                               "email" : "fake@gmail.com"]))
+//        }
+        MainMessagesView()
     }
 }

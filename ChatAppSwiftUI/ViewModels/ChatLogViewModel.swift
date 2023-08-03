@@ -11,6 +11,7 @@ import Firebase
 class ChatLogViewModel: ObservableObject {
     @Published var chatText = ""
     @Published var chatMessages = [ChatMessage]()
+    @Published var count = 0
     
     let chatUser: ChatUser?
     
@@ -40,6 +41,7 @@ class ChatLogViewModel: ObservableObject {
                         self.chatMessages.append(.init(documentId: change.document.documentID, data: data))
                     }
                 })
+                self.count += 1
             }
     }
     
@@ -69,6 +71,7 @@ class ChatLogViewModel: ObservableObject {
             }
             print("Save in Firestore current user sending message")
             self.chatText = ""
+            self.count += 1
         }
         
         let recipientMessageDocument = FirebaseManager.shared.firestore
@@ -76,6 +79,7 @@ class ChatLogViewModel: ObservableObject {
             .document(toId)
             .collection(fromId)
             .document()
+            
         
         recipientMessageDocument.setData(messageData) {error in
             if let error = error {
