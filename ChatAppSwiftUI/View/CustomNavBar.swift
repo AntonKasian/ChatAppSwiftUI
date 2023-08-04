@@ -25,7 +25,7 @@ struct CustomNavBar: View {
                 .shadow(radius: 5)
             
             VStack(alignment: .leading, spacing: 4) {
-                if let email = mainViewModel.chatUser?.email {
+                if let email = mainViewModel.chatUser?.email { 
                     Text(email
                         .replacingOccurrences(of: "@gmail.com", with: "")
                         .replacingOccurrences(of: "@mail.com", with: ""))
@@ -68,6 +68,7 @@ struct CustomNavBar: View {
             LoginView(didCompleteLoginProcess: {
                 self.mainViewModel.isUserCurrentlyLogedOut = false
                 self.mainViewModel.fetchCurrentUser()
+                self.mainViewModel.fetchResentMessages()
             })
         }
     }
