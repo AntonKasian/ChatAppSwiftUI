@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseFirestoreSwift
 
 class MainMessagesViewViewModel: ObservableObject {
     
@@ -44,12 +46,17 @@ class MainMessagesViewViewModel: ObservableObject {
                     
                     let docId = change.document.documentID
                     if let index = self.recentMessages.firstIndex(where: { rm in
-                        return rm.documentId == docId
+                        return rm.id == docId
                     }) {
                         self.recentMessages.remove(at: index)
                     }
-                    self.recentMessages.insert(.init(documentId: docId, data: change.document.data()), at: 0)
                     
+                    do {
+                        let rm = try change.document.data(as: RecentMessage.self)
+                        self.recentMessages.insert(rm, at: 0)
+                    } catch {
+                        print(error)
+                    }                    
                 })
             }
     }

@@ -61,7 +61,7 @@ class ChatLogViewModel: ObservableObject {
         let messageData = [FirebaseConstants.fromId: fromId,
                            FirebaseConstants.toId: toId,
                            FirebaseConstants.text: self.chatText,
-                           "timestamp": Timestamp()] as [String : Any]
+                           FirebaseConstants.timestamp: Timestamp()] as [String : Any]
         
         document.setData(messageData) {error in
             if let error = error {
@@ -72,7 +72,6 @@ class ChatLogViewModel: ObservableObject {
             print("Save in Firestore current user sending message")
             
             self.persistRecentMessage()
-            
             self.chatText = ""
             self.count += 1
         }
