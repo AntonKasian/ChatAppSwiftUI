@@ -28,10 +28,15 @@ class MainMessagesViewViewModel: ObservableObject {
         fetchResentMessages()
     }
     
+    private var firestorListener: ListenerRegistration?
+    
      func fetchResentMessages() {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+         
+         firestorListener?.remove()
+         self.recentMessages.removeAll()
         
-        FirebaseManager.shared.firestore
+         firestorListener = FirebaseManager.shared.firestore
             .collection("recent_messages")
             .document(uid)
             .collection("messages")
@@ -72,12 +77,8 @@ class MainMessagesViewViewModel: ObservableObject {
                 self.errorMessage = "Failed to fetch current user. ERROR: \(error)"
                 return
             }
-            guard let data = snapshot?.data() else {
-                print("Cannot find DATA")
-                return
-            }
-            
-            self.chatUser = .init(data: data)
+            self.chatUser = try? snapshot?.data(as: ChatUser.self)
+            FirebaseManager.shared.currentUser = self.chatUser
         }
     }
     

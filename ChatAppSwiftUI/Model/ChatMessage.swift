@@ -5,10 +5,11 @@
 //  Created by Anton on 03.08.23.
 //
 
-import SwiftUI
+import Foundation
+import FirebaseFirestoreSwift
 
 
-struct ChatMessage: Identifiable {
+struct ChatMessage: Codable, Identifiable {
 
     var id: String { documentId }
 
@@ -25,7 +26,6 @@ struct ChatMessage: Identifiable {
 
 //struct ChatMessage: Codable, Identifiable {
 //    @DocumentID var id: String?
-//
 //    let fromId, toId, text: String
 //    let timestamp: Date
 //}

@@ -36,8 +36,8 @@ struct MainMessagesView: View {
     private var messagesScrollView: some View {
             ScrollView {
                 ForEach(viewModel.recentMessages) { recentMessage in
-                    // Maybe in future I should remove IF statement. 
-                    if recentMessage.fromId == FirebaseManager.shared.auth.currentUser?.uid {
+                    // Maybe in future I should remove IF statement.
+//                    if recentMessage.fromId == FirebaseManager.shared.auth.currentUser?.uid {
                         VStack {
                             NavigationLink {
                                 Text("Destination")
@@ -73,7 +73,7 @@ struct MainMessagesView: View {
                         }
                         .padding(.horizontal)
                         .padding(.top, 2)
-                    }
+//                    }
                 }
                 .padding(.bottom, 50)
             }

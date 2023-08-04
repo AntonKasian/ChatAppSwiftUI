@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ChatUser: Identifiable {
+struct ChatUser: Codable, Identifiable {
     
     var id: String { uid }
     

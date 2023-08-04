@@ -13,8 +13,8 @@ struct ChatLogView: View {
     static let emptyScrolltoString = "Empty"
     
     init(chatUser: ChatUser?) {
-        self.chatUser = chatUser   // made for let chatUser
-        self.viewModel = .init(chatUser: chatUser)
+        self.chatUser = chatUser
+        self.viewModel = ChatLogViewModel(chatUser: chatUser)
     }
     
     @ObservedObject var viewModel: ChatLogViewModel
@@ -24,21 +24,18 @@ struct ChatLogView: View {
             messagesView
             chatBottomBar
                 .background(Color(.systemBackground))
-            
         }
         .padding(.horizontal, -13)
         .navigationTitle(chatUser?.email ?? "Not found")
         .navigationBarTitleDisplayMode(.inline)
-
         .padding()
     }
     
     private var messagesView: some View {
         ScrollView {
             ScrollViewReader { scrollViewProxy in
-                
                 VStack {
-                    ForEach(viewModel.chatMessages) {message in
+                    ForEach(viewModel.chatMessages) { message in
                         MessageView(message: message)
                     }
                     HStack{
@@ -65,32 +62,28 @@ struct ChatLogView: View {
                 .font(.system(size: 24))
                 .foregroundColor(Color(.label))
             ZStack {
-                ZStack {
-                    if viewModel.chatText.isEmpty {
-                        Text("Message")
-                            .foregroundColor(Color(.placeholderText))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, 3)
-                    }
-                    TextEditor(text: $viewModel.chatText)
-                        .background(Color(.init(white: 0.8, alpha: 1)))
-                        .cornerRadius(10)
-                        .opacity(viewModel.chatText.isEmpty ? 0.2 : 1)
-                        
+                if viewModel.chatText.isEmpty {
+                    Text("Message")
+                        .foregroundColor(Color(.placeholderText))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 3)
                 }
+                TextEditor(text: $viewModel.chatText)
+                    .background(Color(.init(white: 0.8, alpha: 1)))
+                    .cornerRadius(10)
+                    .opacity(viewModel.chatText.isEmpty ? 0.2 : 1)
             }
-                .frame(height: 40)
+            .frame(height: 40)
             Button {
                 viewModel.handleSend()
             } label: {
-                    Text("Send")
-                        .foregroundColor(.white)
+                Text("Send")
+                    .foregroundColor(.white)
             }
             .padding(.horizontal)
             .padding(.vertical, 8)
             .background(Color.blue)
             .cornerRadius(5)
-
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
