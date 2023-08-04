@@ -75,10 +75,6 @@ class ChatLogViewModel: ObservableObject {
             
             self.chatText = ""
             self.count += 1
-//            DispatchQueue.main.async {
-//                        self.chatText = ""
-//                        self.count += 1
-//                    }
         }
         
         let recipientMessageDocument = FirebaseManager.shared.firestore
@@ -86,7 +82,7 @@ class ChatLogViewModel: ObservableObject {
             .document(toId)
             .collection(fromId)
             .document()
-            
+        
         
         recipientMessageDocument.setData(messageData) {error in
             if let error = error {

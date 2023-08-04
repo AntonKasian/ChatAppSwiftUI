@@ -23,7 +23,6 @@ class MainMessagesViewViewModel: ObservableObject {
         }
         
         fetchCurrentUser()
-        
         fetchResentMessages()
     }
     
@@ -41,30 +40,26 @@ class MainMessagesViewViewModel: ObservableObject {
                     return
                 }
                 
-                //Возомжно тут происходит переход на MainView после нажатитя отправить
                 querySnapshot?.documentChanges.forEach({ change in
-                   
-                    //                    if change.type == .added {
+                    
                     let docId = change.document.documentID
                     if let index = self.recentMessages.firstIndex(where: { rm in
                         return rm.documentId == docId
                     }) {
                         self.recentMessages.remove(at: index)
                     }
-                    
                     self.recentMessages.insert(.init(documentId: docId, data: change.document.data()), at: 0)
                     
-                    //                    }
                 })
             }
     }
     
-     func fetchCurrentUser() {
+    func fetchCurrentUser() {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
             self.errorMessage = "Could not find user"
             return
         }
-    
+        
         FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
             if let error = error {
                 self.errorMessage = "Failed to fetch current user. ERROR: \(error)"

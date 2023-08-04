@@ -94,19 +94,13 @@ struct LoginView: View {
     
     func handlerAction() {
         if viewModel.isLogInMode {
-//           DispatchQueue.main.async {
-//               self.loginUser()
-//           }
-           loginUser()
-          print("Login")
-       } else {
-//           DispatchQueue.main.async {
-//               self.createNewAccount()
-//           }
+            loginUser()
+            print("Login")
+        } else {
             createNewAccount()
-           print("Create account")
-       }
-   }
+            print("Create account")
+        }
+    }
    
     private func createNewAccount() {
         
@@ -128,7 +122,6 @@ struct LoginView: View {
            // Download image to Firebase
            
             self.persistImageToStorage()
-           
            self.didCompleteLoginProcess()
        }
    }

@@ -26,7 +26,7 @@ struct ChatLogView: View {
                 .background(Color(.systemBackground))
             
         }
-        .padding(.horizontal, -13) // maybe bugs is here with ScrollView
+        .padding(.horizontal, -13)
         .navigationTitle(chatUser?.email ?? "Not found")
         .navigationBarTitleDisplayMode(.inline)
 
@@ -55,7 +55,6 @@ struct ChatLogView: View {
                 }
             }
         }
-        //.background(Color(.init(white: 0.95, alpha: 1)))
         .background(Color(.systemBackground))
         .edgesIgnoringSafeArea(.horizontal)
     }
@@ -81,8 +80,6 @@ struct ChatLogView: View {
                 }
             }
                 .frame(height: 40)
-            
-            //TextField("Description", text: $viewModel.chatText)
             Button {
                 viewModel.handleSend()
             } label: {
