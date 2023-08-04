@@ -75,6 +75,10 @@ class ChatLogViewModel: ObservableObject {
             
             self.chatText = ""
             self.count += 1
+//            DispatchQueue.main.async {
+//                        self.chatText = ""
+//                        self.count += 1
+//                    }
         }
         
         let recipientMessageDocument = FirebaseManager.shared.firestore
@@ -94,7 +98,7 @@ class ChatLogViewModel: ObservableObject {
         }
     }
     
-    private func persistRecentMessage() {
+    private func persistRecentMessage() { // Myabe bug with scrollView here
         guard let chatUser = chatUser else { return }
         
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }

@@ -11,17 +11,20 @@ import SDWebImageSwiftUI
 struct MainMessagesView: View {
     
     @ObservedObject var viewModel = MainMessagesViewViewModel()
-    
+    @State var chatUser: ChatUser?
     
     var body: some View {
         NavigationView {
             VStack {
                 CustomNavBar()
                 messagesScrollView
-
+                NavigationLink("", isActive: $viewModel.shouldNavigateToChatLogView) {
+                    ChatLogView(chatUser: self.chatUser)
+                }
+                
             }
             .overlay(
-                NewMessageButton()
+                newMessageButton
                 , alignment: .bottom
             )
             .navigationBarHidden(true)
@@ -45,15 +48,6 @@ struct MainMessagesView: View {
                                 .overlay(RoundedRectangle(cornerRadius: 44)
                                     .stroke(Color(.label), lineWidth: 1))
                                 .shadow(radius: 5)
-//                            Image(systemName: "person.fill")
-//                                .font(.system(size: 32))
-//                                .padding(8)
-//                                .foregroundColor(Color(.label))
-//                                .overlay(RoundedRectangle(cornerRadius: 44)
-//                                    .stroke(Color(.label), lineWidth: 1)
-//                                )
-                            
-                            
                             VStack(alignment: .leading)  {
                                 Text(recentMessage.email)
                                     .font(.system(size: 16, weight: .bold))
@@ -70,7 +64,7 @@ struct MainMessagesView: View {
                                 .foregroundColor(Color(.label))
                         }
                     }
-                        
+                    
                     
                     
                     Divider()
@@ -80,6 +74,34 @@ struct MainMessagesView: View {
                 .padding(.top, 2)
             } .padding(.bottom, 50)
         }
+    }
+    
+    private var newMessageButton: some View {
+        Button {
+            viewModel.shouldShowNewMessageScreen.toggle()
+            print("New message button tapped")
+        } label: {
+            HStack {
+                Spacer()
+                Text("+ New Message")
+                    .font(.system(size: 16, weight: .bold))
+                Spacer()
+            }
+            .foregroundColor(.white)
+            .padding(.vertical)
+            .background(Color.blue)
+            .cornerRadius(32)
+            .padding(.horizontal)
+            .shadow(radius: 15)
+        }
+        .fullScreenCover(isPresented: $viewModel.shouldShowNewMessageScreen) {
+            NewMessageView(didSelectNewUser: { user in
+                print(user.email)
+                self.viewModel.shouldNavigateToChatLogView.toggle()
+                self.chatUser = user
+            })
+        }
+        
     }
 }
 

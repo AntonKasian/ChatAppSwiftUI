@@ -24,8 +24,9 @@ struct ChatLogView: View {
             messagesView
             chatBottomBar
                 .background(Color(.systemBackground))
+            
         }
-        .padding(.horizontal, -13) // maybe bugs will be here with ScrollView
+        .padding(.horizontal, -13) // maybe bugs is here with ScrollView
         .navigationTitle(chatUser?.email ?? "Not found")
         .navigationBarTitleDisplayMode(.inline)
 
