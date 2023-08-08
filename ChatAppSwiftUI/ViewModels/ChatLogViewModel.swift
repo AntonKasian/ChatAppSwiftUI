@@ -20,7 +20,10 @@ class ChatLogViewModel: ObservableObject {
         fetchMessages()
     }
     
+    var firestoreListener: ListenerRegistration?
+    
     private func fetchMessages() {
+        firestoreListener?.remove()
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         guard let toId = chatUser?.uid else { return }
         
@@ -39,6 +42,7 @@ class ChatLogViewModel: ObservableObject {
                     if change.type == .added {
                         let data = change.document.data()
                         self.chatMessages.append(.init(documentId: change.document.documentID, data: data))
+                        print("Appending chat message in ChatLogView: \(Date())")
                     }
                 })
                 self.count += 1

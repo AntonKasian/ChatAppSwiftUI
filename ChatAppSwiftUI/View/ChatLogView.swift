@@ -29,6 +29,9 @@ struct ChatLogView: View {
         .navigationTitle(chatUser?.email ?? "Not found")
         .navigationBarTitleDisplayMode(.inline)
         .padding()
+        .onDisappear {
+            viewModel.firestoreListener?.remove()
+        }
     }
     
     private var messagesView: some View {
