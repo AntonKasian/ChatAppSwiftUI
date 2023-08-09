@@ -22,7 +22,7 @@ The app is built using the SwiftUI framework for user interface design and Fireb
 * SwiftUI: Used to create a dynamic and modern user interface for the app.
 * Firebase: Utilized for data storage, synchronization, and user authentication.
 
-## Установка
+## Installation
 
 * Clone the repository:
   
