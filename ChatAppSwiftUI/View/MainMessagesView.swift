@@ -14,6 +14,8 @@ struct MainMessagesView: View {
     @State var chatUser: ChatUser?
     @State var isAnimating = true
     
+    private var chatLogViewModel = ChatLogViewModel(chatUser: nil)
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -21,7 +23,8 @@ struct MainMessagesView: View {
                 customNavBar
                 messagesScrollView
                 NavigationLink("", isActive: $viewModel.shouldNavigateToChatLogView) {
-                    ChatLogView(chatUser: self.chatUser)
+//                    ChatLogView(chatUser: self.chatUser)
+                    ChatLogView(viewModel: chatLogViewModel)
                 }
                 
             }
@@ -39,8 +42,13 @@ struct MainMessagesView: View {
                     // Maybe in future I should remove IF statement.
 //                    if recentMessage.fromId == FirebaseManager.shared.auth.currentUser?.uid {
                         VStack {
-                            NavigationLink {
-                                Text("Destination")
+                            Button {
+                                let uid = FirebaseManager.shared.auth.currentUser?.uid == recentMessage.fromId ? recentMessage.toId : recentMessage.fromId
+                                
+                                self.chatUser = .init(data: [FirebaseConstants.email: recentMessage.email, FirebaseConstants.profileImageURL: recentMessage.profileImageURL, FirebaseConstants.uid: uid])
+                                self.chatLogViewModel.chatUser = self.chatUser
+                                self.chatLogViewModel.fetchMessages()
+                                self.viewModel.shouldNavigateToChatLogView.toggle()
                             } label: {
                                 HStack(spacing: 16) {
                                     WebImage(url: URL(string: recentMessage.profileImageURL))
@@ -102,6 +110,8 @@ struct MainMessagesView: View {
                 print(user.email)
                 self.viewModel.shouldNavigateToChatLogView.toggle()
                 self.chatUser = user
+                self.chatLogViewModel.chatUser = user
+                self.chatLogViewModel.fetchMessages()
             })
         }
         

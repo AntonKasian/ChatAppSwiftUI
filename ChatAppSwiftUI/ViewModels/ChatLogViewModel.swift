@@ -13,7 +13,7 @@ class ChatLogViewModel: ObservableObject {
     @Published var chatMessages = [ChatMessage]()
     @Published var count = 0
     
-    let chatUser: ChatUser?
+    var chatUser: ChatUser?
     
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser
@@ -22,12 +22,13 @@ class ChatLogViewModel: ObservableObject {
     
     var firestoreListener: ListenerRegistration?
     
-    private func fetchMessages() {
-        firestoreListener?.remove()
+    func fetchMessages() {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         guard let toId = chatUser?.uid else { return }
+        firestoreListener?.remove()
+        chatMessages.removeAll()
         
-        FirebaseManager.shared.firestore
+        firestoreListener = FirebaseManager.shared.firestore
             .collection("messages")
             .document(fromId)
             .collection(toId)

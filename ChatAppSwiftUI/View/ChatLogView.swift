@@ -9,13 +9,14 @@ import SwiftUI
 
 struct ChatLogView: View {
     
-    let chatUser: ChatUser?
     static let emptyScrolltoString = "Empty"
     
-    init(chatUser: ChatUser?) {
-        self.chatUser = chatUser
-        self.viewModel = ChatLogViewModel(chatUser: chatUser)
-    }
+//    let chatUser: ChatUser?
+//
+//    init(chatUser: ChatUser?) {
+//        self.chatUser = chatUser
+//        self.viewModel = ChatLogViewModel(chatUser: chatUser)
+//    }
     
     @ObservedObject var viewModel: ChatLogViewModel
     
@@ -26,7 +27,7 @@ struct ChatLogView: View {
                 .background(Color(.systemBackground))
         }
         .padding(.horizontal, -13)
-        .navigationTitle(chatUser?.email ?? "Not found")
+        .navigationTitle(viewModel.chatUser?.email ?? "Not found")
         .navigationBarTitleDisplayMode(.inline)
         .padding()
         .onDisappear {
