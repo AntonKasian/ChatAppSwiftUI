@@ -19,11 +19,9 @@ struct MainMessagesView: View {
     var body: some View {
         NavigationView {
             VStack {
-//                CustomNavBar()
                 customNavBar
                 messagesScrollView
                 NavigationLink("", isActive: $viewModel.shouldNavigateToChatLogView) {
-//                    ChatLogView(chatUser: self.chatUser)
                     ChatLogView(viewModel: chatLogViewModel)
                 }
                 

@@ -10,14 +10,7 @@ import SwiftUI
 struct ChatLogView: View {
     
     static let emptyScrolltoString = "Empty"
-    
-//    let chatUser: ChatUser?
-//
-//    init(chatUser: ChatUser?) {
-//        self.chatUser = chatUser
-//        self.viewModel = ChatLogViewModel(chatUser: chatUser)
-//    }
-    
+
     @ObservedObject var viewModel: ChatLogViewModel
     
     var body: some View {
@@ -47,19 +40,21 @@ struct ChatLogView: View {
                     }
                     .id(Self.emptyScrolltoString)
                 }
-                .onReceive(viewModel.$count) { _ in
-                    if viewModel.count > 0 {
-                        withAnimation(.easeOut(duration: 0.5)) {
-                            scrollViewProxy.scrollTo(Self.emptyScrolltoString, anchor: .bottom)
-                        }
+                .onAppear {
+                    scrollViewProxy.scrollTo(Self.emptyScrolltoString, anchor: .bottom)
+                }
+                .onChange(of: viewModel.count) { _ in
+                    withAnimation(.easeOut(duration: 0.5)) {
+                        scrollViewProxy.scrollTo(Self.emptyScrolltoString, anchor: .bottom)
                     }
                 }
             }
+
         }
         .background(Color(.systemBackground))
         .edgesIgnoringSafeArea(.horizontal)
     }
-    
+
     private var chatBottomBar: some View {
         HStack(spacing: 16) {
             Image(systemName: "photo.on.rectangle")
